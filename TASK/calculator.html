@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .calculator {
+            width: 320px;
+            background: #222;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .display {
+            width: 100%;
+            height: 70px;
+            background: #fff;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 30px;
+            text-align: right;
+            outline: none;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            height: 60px;
+            border: none;
+            border-radius: 12px;
+            font-size: 22px;
+            cursor: pointer;
+            background: #444;
+            color: white;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        .operator {
+            background: #ff9500;
+        }
+
+        .operator:hover {
+            background: #e68900;
+        }
+
+        .clear {
+            background: #d9534f;
+        }
+
+        .clear:hover {
+            background: #c9302c;
+        }
+
+        .equal {
+            background: #28a745;
+        }
+
+        .equal:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculator">
+
+        <input type="text" id="display" class="display" value="0" readonly>
+
+        <div class="buttons">
+
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button onclick="deleteLast()">⌫</button>
+            <button onclick="appendValue('%')">%</button>
+            <button class="operator" onclick="appendValue('/')">÷</button>
+
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <button class="operator" onclick="appendValue('*')">×</button>
+
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <button class="operator" onclick="appendValue('-')">−</button>
+
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            <button class="operator" onclick="appendValue('+')">+</button>
+
+            <button onclick="appendValue('0')">0</button>
+            <button onclick="appendValue('.')">.</button>
+            <button class="equal" onclick="calculate()">=</button>
+
+        </div>
+    </div>
+
+    <script>
+
+        let display = document.getElementById("display");
+
+        function appendValue(value) {
+
+            if (display.value === "0" || display.value === "Error") {
+                display.value = value;
+            } 
+            else {
+                display.value += value;
+            }
+        }
+
+        function clearDisplay() {
+            display.value = "0";
+        }
+
+        function deleteLast() {
+
+            if (display.value.length === 1 || display.value === "Error") {
+                display.value = "0";
+            } 
+            else {
+                display.value = display.value.slice(0, -1);
+            }
+        }
+
+        function calculate() {
+
+            try {
+
+                let expression = display.value;
+
+                
+                expression = expression.replace(
+                    /(\d+(?:\.\d+)?)%/g,
+                    "($1/100)"
+                );
+
+                let result = eval(expression);
+
+                if (!isFinite(result)) {
+                    display.value = "Error";
+                } 
+                else {
+                    display.value = result;
+                }
+
+            } 
+            catch (error) {
+                display.value = "Error";
+            }
+        }
+
+    </script>
+
+</body>
+</html>
